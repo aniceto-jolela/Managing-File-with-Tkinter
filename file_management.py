@@ -15,16 +15,30 @@ def open_file_dialog():
     if file_path:
         messagebox.showinfo('Selected', f'File path:\n{file_path}')
         lb_path_v.set(file_path)
-        ls_item.set(os.path.basename(file_path))
         et_default['state'] = 'enable'
         btn['state'] = 'enable'
+        all_listbox()
+
+
+def all_listbox():
+    if lb_path_v.get():
+        if int(rd_state.get()) == 1:
+            ls.delete(0, END)
+            path_dir = os.path.split(file_path)[0]
+            for count, file in enumerate(os.listdir(path_dir)):
+                ls.insert(count, file)
+        else:
+            ls.delete(0, END)
+            ls.insert(0, os.path.basename(file_path))
+    else:
+        messagebox.showerror('Error', 'Empty list!')
 
 
 def clear_entry():
     messagebox.showinfo('Success', 'Successful file rename!')
     name.set('')
     lb_path_v.set('')
-    ls_item.set('')
+    ls.delete(0, END)
     et_default['state'] = 'disable'
     btn['state'] = 'disable'
 
@@ -55,15 +69,14 @@ root.title('File rename')
 frame = ttk.Frame(root)
 name = StringVar()
 lb_path_v = StringVar()
-ls_item = StringVar()
 rd_state = StringVar(value='0')
 lb_path = ttk.Label(frame, text='path...', foreground='green')
 btn_path = ttk.Button(frame, text='open', command=open_file_dialog)
-ls = Listbox(frame, listvariable=ls_item, state='disabled')
-rb_1 = ttk.Radiobutton(frame, text='Only', variable=rd_state, value='0')
-rb_2 = ttk.Radiobutton(frame, text='All', variable=rd_state, value='1')
+ls = Listbox(frame, yscrollcommand='vertical', activestyle='dotbox')
+rb_1 = ttk.Radiobutton(frame, text='Only', variable=rd_state, value='0', command=all_listbox)
+rb_2 = ttk.Radiobutton(frame, text='All', variable=rd_state, value='1', command=all_listbox)
 
-lb_default = ttk.Label(frame, text='Which name do you want to use for files?')
+lb_default = ttk.Label(frame, text='What name do you want to use for file(s)?')
 et_default = ttk.Entry(frame, textvariable=name, state='disable')
 btn = ttk.Button(frame, text='Rename', state='disable', command=file_rename)
 
