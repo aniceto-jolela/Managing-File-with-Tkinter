@@ -27,7 +27,10 @@ or
 
 pyinstaller file_name.py --onefile -w
 ```
+#### Files
+![1.png](assets/1.png)
 
+![2.png](assets/2.png)
 #
 #
 ###### Author : Aniceto Jolela 🥰
